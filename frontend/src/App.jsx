@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: '2rem' }}>
-      <h1>React + Node.js</h1>
+      <h1>React + Node.js modifié</h1>
       <p>{message || 'Chargement...'}</p>
     </div>
   )

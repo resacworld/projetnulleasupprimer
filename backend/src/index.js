@@ -15,7 +15,7 @@ app.get('/api/health', (_req, res) => {
 })
 
 app.get('/api/hello', (_req, res) => {
-  res.json({ message: 'Hello from Node.js backend!' })
+  res.json({ message: 'Hello from Node.js backend modifé !' })
 })
 
 app.use(express.static(path.join(__dirname, '../public')))
