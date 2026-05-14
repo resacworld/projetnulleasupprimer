@@ -10,13 +10,20 @@ services:
   frontend:
     build: ./frontend
     restart: unless-stopped
-    ports:
-      - "${PORT:-80}:80"
     depends_on:
       - backend
     networks:
       - app-network
+      - coolify
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`cv.vidalotvdt.fr`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
 
 networks:
   app-network:
     driver: bridge
+  coolify:
+    external: true
