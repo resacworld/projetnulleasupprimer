@@ -1,29 +1,24 @@
 services:
-  backend:
-    build: ./backend
+  app:
+    build: .
     restart: unless-stopped
     environment:
       - PORT=3000
     networks:
-      - app-network
-
-  frontend:
-    build: ./frontend
-    restart: unless-stopped
-    depends_on:
-      - backend
-    networks:
-      - app-network
       - coolify
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`cv.vidalotvdt.fr`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      # HTTPS
+      - "traefik.http.routers.app.rule=Host(`cv.vidalotvdt.fr`)"
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls.certresolver=letsencrypt"
+      - "traefik.http.services.app.loadbalancer.server.port=3000"
+      # Redirect HTTP → HTTPS
+      - "traefik.http.routers.app-http.rule=Host(`cv.vidalotvdt.fr`)"
+      - "traefik.http.routers.app-http.entrypoints=web"
+      - "traefik.http.routers.app-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
 
 networks:
-  app-network:
-    driver: bridge
   coolify:
     external: true
